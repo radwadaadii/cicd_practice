@@ -67,8 +67,8 @@ jobs:
             command: "apk add --update curl"
         - run:
             name: test webiste
-            command:
-              if curl -s --head "https://blog.udacity.com"
+            command: |
+              if curl -s --head "https://blog.udacity.com/"
               then 
                 return 0      
               else 
