@@ -18,6 +18,49 @@ jobs:
                 --template-file template.yml \
                 --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:5} \
                 --region us-east-1
+        - run:
+            name: prepare inventory file
+            command: |
+              echo "[all]" > inventory
+            name: add ip to inventory file
+            command: |
+              aws ec2 describe-instances\ 
+              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --output text >> inventory
+        - persist_to_workspace:
+          root: .
+          paths:
+            - inventory
+
+  configure_infrastructure: 
+      docker:
+        - image: 
+      steps:
+        - checkout
+        - add_ssh_keys:
+                # You can get this ID in the section where you registered the SSH Key
+                fingerprints: ["e4:b3:42:fd:84:3d:56:c0:54:8f:e8:70:36:dd:68:12"] 
+        - run:
+            name: Install Ansible
+            command: |
+               apk add --update ansible
+        - run:
+            name: Run Playbook and Configure server
+            command: |
+               ansible-playbook -i inventory main-remote.yml
+
+        - attach_workspace:
+            at: .
+        - run:
+            name: add ip to inventory
+            command: |
+              aws ec2 describe-instances \
+                 --query 'Reservations[*].Instances[*].PublicIpAddress' \
+                 --output text >> inventory
+        - run:
+            name: print invetory output
+            command: "cat inventory"
+
 
 # Sequential workflow
 workflows:
@@ -25,3 +68,6 @@ workflows:
   myWorkflow:
     jobs:
       - create_infrastructure
+      - configure_infrastructure:
+        requires: 
+          create_infrastructure
