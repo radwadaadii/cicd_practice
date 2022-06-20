@@ -28,6 +28,9 @@ jobs:
               aws ec2 describe-instances \
                 --query 'Reservations[*].Instances[*].PublicIpAddress' \
                 --output text >> inventory
+        - run:
+            name: install tar to use workspace
+            command: "apt install -y tar"
         - persist_to_workspace:
             root: .
             paths:
