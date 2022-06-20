@@ -68,7 +68,7 @@ jobs:
         - run:
             name: test webiste
             command: |
-              URL = https://blog.udacityyyy.com/
+              URL="https://blog.udacityyyy.com/""
               if curl -s --head ${URL}
               then 
                 return 0      
