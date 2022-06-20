@@ -85,7 +85,7 @@ jobs:
               && rm -rf /var/cache/apk/*
         - run: 
             name: chek aws
-           command: aws --version 
+            command: aws --version 
         - run:
             name: test webiste
             command: |
