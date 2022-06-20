@@ -29,9 +29,9 @@ jobs:
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --output text >> inventory
         - persist_to_workspace:
-          root: .
-          paths:
-            - inventory
+            root: .
+            paths:
+              - inventory
 
   configure_infrastructure: 
       docker:
@@ -70,5 +70,5 @@ workflows:
     jobs:
       - create_infrastructure
       - configure_infrastructure:
-        requires: 
-          create_infrastructure
+          requires: 
+            - create_infrastructure
