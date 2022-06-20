@@ -30,7 +30,7 @@ jobs:
                 --output text >> inventory
         - run:
             name: install tar to use workspace
-            command: "apt install -y tar"
+            command: "yum install -y tar gzip"
         - persist_to_workspace:
             root: .
             paths:
