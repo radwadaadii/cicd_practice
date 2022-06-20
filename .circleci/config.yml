@@ -35,9 +35,20 @@ jobs:
 
   configure_infrastructure: 
       docker:
-        - image: 
+        - image: python:3.7-alpine3.11
       steps:
         - checkout
+        - attach_workspace:
+            at: .
+        - run:
+            name: add ip to inventory
+            command: |
+              aws ec2 describe-instances \
+                 --query 'Reservations[*].Instances[*].PublicIpAddress' \
+                 --output text >> inventory
+        - run:
+            name: print invetory output
+            command: "cat inventory"
         - add_ssh_keys:
                 # You can get this ID in the section where you registered the SSH Key
                 fingerprints: ["e4:b3:42:fd:84:3d:56:c0:54:8f:e8:70:36:dd:68:12"] 
@@ -50,17 +61,7 @@ jobs:
             command: |
                ansible-playbook -i inventory main-remote.yml
 
-        - attach_workspace:
-            at: .
-        - run:
-            name: add ip to inventory
-            command: |
-              aws ec2 describe-instances \
-                 --query 'Reservations[*].Instances[*].PublicIpAddress' \
-                 --output text >> inventory
-        - run:
-            name: print invetory output
-            command: "cat inventory"
+
 
 
 # Sequential workflow
