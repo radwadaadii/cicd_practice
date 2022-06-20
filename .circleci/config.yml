@@ -26,8 +26,8 @@ jobs:
             name: add ip to inventory file
             command: |
               aws ec2 describe-instances \ 
-              --query 'Reservations[*].Instances[*].PublicIpAddress' \
-              --output text >> inventory
+                --query 'Reservations[*].Instances[*].PublicIpAddress' \
+                --output text >> inventory
         - persist_to_workspace:
             root: .
             paths:
