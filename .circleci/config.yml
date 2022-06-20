@@ -22,6 +22,7 @@ jobs:
             name: prepare inventory file
             command: |
               echo "[all]" > inventory
+        - run:
             name: add ip to inventory file
             command: |
               aws ec2 describe-instances\ 
