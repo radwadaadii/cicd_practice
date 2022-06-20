@@ -70,10 +70,8 @@ jobs:
             command:
               if curl -s --head "https://blog.udacity.com"
               then 
-                echo "It worked!" 
                 return 0      
               else 
-                echo "It failed" 
                 return 1 
               fi
 
